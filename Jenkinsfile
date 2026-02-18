@@ -5,21 +5,37 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Source code checkout completed'
+                echo 'Checking out code from Git'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the application'
+                echo 'Compiling Java program'
+                bat 'javac Hello.java'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing the application'
+                echo 'Running Java program'
+                bat 'java Hello'
             }
         }
 
     }
+
+    post {
+        success {
+            echo 'Build Successful!'
+        }
+        failure {
+            echo 'Build Failed!'
+        }
+        always {
+            archiveArtifacts artifacts: '*.class'
+            echo 'Artifacts archived.'
+        }
+    }
 }
+
